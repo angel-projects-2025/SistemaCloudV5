@@ -1,0 +1,81 @@
+@property --network-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.network-diagram-node {
+  position: relative;
+  isolation: isolate;
+}
+
+.network-node--reference { opacity: 0.55; }
+.network-node--included { border-color: #2563eb; }
+.network-node--selected { outline: 2px solid #60a5fa; outline-offset: 4px; }
+.network-diagram-node:focus-visible { outline: 2px solid #60a5fa; outline-offset: 4px; }
+.network-diagram-vpc.network-node--reference { opacity: 1; }
+.network-diagram-vpc.network-node--reference > .network-vpc-heading { opacity: 0.55; }
+
+@supports (background: conic-gradient(from 0deg, #2563eb, #16a34a)) and (mask-composite: exclude) {
+  .network-node--included::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    padding: 2px;
+    pointer-events: none;
+    background: conic-gradient(from var(--network-angle), #2563eb, #a855f7, #16a34a, #2563eb);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    animation: network-border-turn 5s linear infinite;
+  }
+}
+
+.network-connector {
+  --network-line-color: 37 99 235;
+  display: flex;
+  justify-content: center;
+  margin: 6px 0;
+  color: rgb(var(--network-line-color));
+}
+.dark .network-connector { --network-line-color: 96 165 250; }
+.network-connector--inactive { opacity: 0.35; }
+.network-connector__line { width: 2px; height: 24px; position: relative; background: rgb(var(--network-line-color) / 0.4); }
+.network-connector__line::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 6px solid rgb(var(--network-line-color) / 0.6);
+}
+.network-connector--active .network-connector__line::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: 0;
+  width: 6px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 7px currentColor;
+  opacity: 0;
+  animation: network-light-pass 10s linear infinite;
+  animation-delay: calc(var(--connector-index, 0) * 2s);
+}
+
+@keyframes network-border-turn { to { --network-angle: 360deg; } }
+@keyframes network-light-pass {
+  0% { opacity: 0; transform: translateY(-5px); }
+  2% { opacity: 1; transform: translateY(0); }
+  17% { opacity: 1; transform: translateY(20px); }
+  20%, 100% { opacity: 0; transform: translateY(24px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .network-diagram-node, .network-diagram-node::before { animation: none !important; transition: none !important; }
+  .network-connector__line::before { animation: none !important; display: none; }
+  .network-connector--active .network-connector__line { background: rgb(var(--network-line-color)); }
+}

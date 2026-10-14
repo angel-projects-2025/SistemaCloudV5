@@ -1,0 +1,42 @@
+export const CREATE_USERS = `
+  CREATE TABLE IF NOT EXISTS users (
+    id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    active_planning_id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NULL,
+    created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    updated_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+`;
+
+export const CREATE_PLANNINGS = `
+  CREATE TABLE IF NOT EXISTS plannings (
+    id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin PRIMARY KEY,
+    seq BIGINT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
+    user_id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    config JSON NOT NULL,
+    saved_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    updated_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+    version INT UNSIGNED NOT NULL DEFAULT 1,
+    INDEX idx_plannings_user_seq (user_id, seq),
+    CONSTRAINT fk_plannings_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+`;
+
+export const CREATE_PROJECTS = `
+  CREATE TABLE IF NOT EXISTS projects (
+    id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin PRIMARY KEY,
+    user_id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    name VARCHAR(120) NOT NULL,
+    description TEXT NULL,
+    technologies VARCHAR(500) NULL,
+    status VARCHAR(50) NOT NULL DEFAULT 'Pendiente de análisis',
+    created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    updated_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3)
+      ON UPDATE CURRENT_TIMESTAMP(3),
+    INDEX idx_projects_user_created (user_id, created_at),
+    CONSTRAINT fk_projects_user
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+`;

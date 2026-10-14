@@ -1,0 +1,177 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-background: 248 250 252;
+  --color-card: 255 255 255;
+  --color-card-border: 226 232 240;
+  --color-text-main: 30 41 59;
+  --color-text-secondary: 100 116 139;
+  color-scheme: light;
+}
+
+.dark {
+  --color-background: 2 6 23;
+  --color-card: 15 23 42;
+  --color-card-border: 30 41 59;
+  --color-text-main: 241 245 249;
+  --color-text-secondary: 148 163 184;
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  background-color: rgb(var(--color-background));
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media print {
+  /* ===== DARK MODE: la impresión SIEMPRE es en modo claro ===== */
+  html,
+  html.dark,
+  body,
+  body.dark,
+  #root,
+  main,
+  .card,
+  table,
+  #printable-report,
+  #printable-report * {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+  }
+
+  html.dark,
+  html.dark * {
+    color-scheme: light !important;
+    /* Neutralizar variantes oscuras de Tailwind en papel */
+    box-shadow: none !important;
+  }
+
+  .dark\:bg-slate-950,
+  .dark\:bg-slate-900,
+  .dark\:bg-slate-800,
+  .dark\:bg-slate-700,
+  .dark\:bg-gray-900,
+  .dark\:bg-gray-800 {
+    background-color: #ffffff !important;
+  }
+
+  .dark\:text-slate-100,
+  .dark\:text-slate-200,
+  .dark\:text-slate-300,
+  .dark\:text-white,
+  .dark\:text-gray-100 {
+    color: #0f172a !important;
+  }
+
+  .dark\:border-slate-700,
+  .dark\:border-slate-800 {
+    border-color: #e5e7eb !important;
+  }
+
+  /* Ocultar barra lateral, botones de acción, formulario y utilidades */
+  aside, header, nav, .print\:hidden,
+  button, input, select, .no-print {
+    display: none !important;
+  }
+
+  /* Forzar contenedor principal a ancho completo A4 sin márgenes desfasados */
+  html, body, #root, main, div {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  body, main, #root {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+  }
+
+  /* Si se imprime un reporte dentro de un Modal (#printable-report) */
+  body:has(#printable-report) * {
+    visibility: hidden;
+  }
+  body:has(#printable-report) #printable-report,
+  body:has(#printable-report) #printable-report * {
+    visibility: visible;
+  }
+
+  #printable-report {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 24px !important;
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* Evitar que tarjetas, rejillas, tablas y gráficos se rompan entre páginas */
+  .card, .grid, .break-inside-avoid, table, figure, svg {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  tr {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  thead {
+    display: table-header-group !important;
+  }
+
+  /* Ajustar tamaño de gráficos e imágenes para que no se deformen */
+  svg {
+    max-width: 100% !important;
+    max-height: 250px !important;
+    margin: 0 auto !important;
+  }
+
+  .recharts-responsive-container,
+  .recharts-wrapper {
+    width: 100% !important;
+    height: 250px !important;
+    max-height: 250px !important;
+    overflow: hidden !important;
+  }
+
+  .recharts-surface {
+    width: 100% !important;
+    height: 250px !important;
+    max-height: 250px !important;
+  }
+
+  .recharts-legend-wrapper {
+    position: static !important;
+    width: 100% !important;
+  }
+
+  /* Formato de tabla de desglose limpia */
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    font-size: 11px !important;
+  }
+
+  th, td {
+    padding: 6px 8px !important;
+    border-bottom: 1px solid #e5e7eb !important;
+  }
+}
