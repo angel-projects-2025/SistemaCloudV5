@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://backend-pk4hzgxv1-angel-d65b.vercel.app/api/:path*"
+      "destination": "https://backend-gamma-gold-84.vercel.app/api/:path*"
     }
   ]
 }
