@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://backend-git-main-angel-d65b.vercel.app/api/:path*"
+    }
+  ]
+}
